@@ -64,30 +64,36 @@ namespace Databas_inlämningsupg1
                 {
                     listBox1.Items.Add(item.PersonerId + " " + item.Namn);
                 }
+                button2.Enabled = false;
             }
         }// END OF UPDATELISTBOX
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string index = listBox1.SelectedItem.ToString();
-            string[] varden = index.Split(' ');
-            string id = varden[0].ToString();
-            int idInt = Convert.ToInt32(id);
-
-            using (var db = new InUpg1())
+            if (listBox1.SelectedIndex >= 0)
             {
-                var person = (from x in db.Pers
-                              where x.PersonerId == idInt
-                              select x).First();
+                button2.Enabled = true;
+            
+                string index = listBox1.SelectedItem.ToString();
+                string[] varden = index.Split(' ');
+                string id = varden[0].ToString();
+                int idInt = Convert.ToInt32(id);
 
-                txtNamn.Text = person.Namn;
-                txtGatuadress.Text = person.GatuAdress;
-                txtPostnr.Text = person.PostNummer;
-                txtPostort.Text = person.Postort;
-                txtTelefon.Text = person.Telefon;
-                txtEpost.Text = person.Epost;
-                dateTimePicker1.Text = person.Födelsedag.ToString();
-                txtSok.Text = "";
+                using (var db = new InUpg1())
+                {
+                    var person = (from x in db.Pers
+                                  where x.PersonerId == idInt
+                                  select x).First();
+
+                    txtNamn.Text = person.Namn;
+                    txtGatuadress.Text = person.GatuAdress;
+                    txtPostnr.Text = person.PostNummer;
+                    txtPostort.Text = person.Postort;
+                    txtTelefon.Text = person.Telefon;
+                    txtEpost.Text = person.Epost;
+                    dateTimePicker1.Text = person.Födelsedag.ToString();
+                    txtSok.Text = "";
+                }
             }
         }
 
@@ -104,6 +110,7 @@ namespace Databas_inlämningsupg1
                 db.SaveChanges();
             }
             UpdateListbox();
+
         }// END OF DELETE-BUTTON.
 
         private void button4_Click(object sender, EventArgs e)
